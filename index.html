@@ -506,42 +506,87 @@
       text-align: center;
     }
 
-    .gallery-grid {
+    /* ============================================================
+       GALLERY — CONSTELLATION LAYOUT
+    ============================================================ */
+    .gallery-constellation {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 36px;
+      grid-template-columns: 1fr 1.8fr 1fr;
+      grid-template-rows: 1fr 1fr auto;
+      grid-template-areas:
+        "a1  sim  a2"
+        "a3  sim  a4"
+        " .   a5   . ";
+      gap: 14px;
+      max-width: 560px;
+      margin: 40px auto 0;
+      align-items: stretch;
     }
 
-    @media (max-width: 500px) {
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    }
-
-    .gallery-item {
-      border-radius: 14px;
+    /* ── Centre photo ── */
+    .gc-center {
+      grid-area: sim;
+      border-radius: 24px;
       overflow: hidden;
-      aspect-ratio: 1 / 1;
-      cursor: pointer;
       position: relative;
-      box-shadow: 0 4px 18px rgba(200,100,180,0.13);
-      transition: var(--transition);
+      cursor: pointer;
+      box-shadow: 0 0 0 4px var(--rose), 0 18px 50px rgba(233,30,140,0.28);
+      animation: gcGlow 3s ease-in-out infinite;
     }
 
-    .gallery-item:hover {
-      transform: scale(1.04);
-      box-shadow: 0 10px 32px rgba(200,100,180,0.28);
-      z-index: 2;
+    @keyframes gcGlow {
+      0%,100% { box-shadow: 0 0 0 4px var(--rose), 0 18px 50px rgba(233,30,140,0.22); }
+      50%     { box-shadow: 0 0 0 7px #e91e8c,      0 22px 60px rgba(233,30,140,0.45); }
     }
 
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
+    .gc-center img {
+      width: 100%; height: 100%;
       object-fit: cover;
+      object-position: center top;
       display: block;
       transition: transform 0.5s ease;
     }
 
-    .gallery-item:hover img { transform: scale(1.1); }
+    .gc-center:hover img { transform: scale(1.04); }
+
+    /* ── Corner / bottom animation tiles ── */
+    .gc-item {
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      box-shadow: 0 4px 18px rgba(200,100,180,0.15);
+      border: 1.5px solid rgba(240,98,146,0.2);
+      transition: transform 0.4s cubic-bezier(0.25,0.8,0.25,1), box-shadow 0.4s;
+    }
+    .gc-item:hover {
+      transform: scale(1.07);
+      box-shadow: 0 12px 36px rgba(200,100,180,0.32);
+    }
+    .gc-item.a1 { grid-area: a1; }
+    .gc-item.a2 { grid-area: a2; }
+    .gc-item.a3 { grid-area: a3; }
+    .gc-item.a4 { grid-area: a4; }
+    .gc-item.a5 { grid-area: a5; }
+
+    /* Mobile: full-width photo on top, 2-col animations below */
+    @media (max-width: 520px) {
+      .gallery-constellation {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "sim sim"
+          "a1  a2"
+          "a3  a4"
+          "a5  a5";
+        max-width: 100%;
+      }
+      .gc-center { aspect-ratio: 4 / 3; }
+      .gc-item.a5 { aspect-ratio: 2 / 1; }
+    }
+
+    /* keep overlay style (reused) */
+    .gc-center .gallery-overlay, .gc-item .gallery-overlay { border-radius: inherit; }
 
     .gallery-overlay {
       position: absolute;
@@ -1218,82 +1263,82 @@
       </p>
       <div class="divider" data-aos="zoom-in" data-aos-delay="120"></div>
 
-      <div class="gallery-grid">
+      <div class="gallery-constellation">
 
-        <!-- Simran's Photo -->
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="0" onclick="openLightbox(this)">
-          <img src="SIMRAN.jpeg" alt="Simran 💖" loading="lazy" />
-          <div class="gallery-overlay"><span>Simran 💖</span></div>
-        </div>
-
-        <!-- Blooming Flower Animation -->
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="60">
+        <!-- ── TOP-LEFT: Blooming Flower ── -->
+        <div class="gc-item a1" data-aos="zoom-in" data-aos-delay="60">
           <div class="anim-box anim-bloom">
-            <span style="position:absolute;top:8%;left:46%;font-size:1.6rem;animation:petalBob 3s ease-in-out 0s infinite">🌸</span>
-            <span style="position:absolute;top:46%;right:5%;font-size:1.6rem;animation:petalBob 3s ease-in-out 0.5s infinite">🌺</span>
-            <span style="position:absolute;bottom:8%;left:46%;font-size:1.6rem;animation:petalBob 3s ease-in-out 1s infinite">🌸</span>
-            <span style="position:absolute;top:46%;left:5%;font-size:1.6rem;animation:petalBob 3s ease-in-out 1.5s infinite">🌺</span>
-            <span style="position:absolute;top:18%;left:18%;font-size:1rem;animation:petalBob 3s ease-in-out 0.25s infinite">🌸</span>
-            <span style="position:absolute;top:18%;right:18%;font-size:1rem;animation:petalBob 3s ease-in-out 0.75s infinite">🌺</span>
-            <span style="position:absolute;bottom:18%;left:18%;font-size:1rem;animation:petalBob 3s ease-in-out 1.25s infinite">🌸</span>
-            <span style="position:absolute;bottom:18%;right:18%;font-size:1rem;animation:petalBob 3s ease-in-out 1.75s infinite">🌺</span>
-            <span style="font-size:2.8rem;animation:heartbeat 2s ease-in-out infinite;z-index:1">🌸</span>
+            <span style="position:absolute;top:8%;left:46%;font-size:1.4rem;animation:petalBob 3s ease-in-out 0s infinite">🌸</span>
+            <span style="position:absolute;top:46%;right:5%;font-size:1.4rem;animation:petalBob 3s ease-in-out 0.5s infinite">🌺</span>
+            <span style="position:absolute;bottom:8%;left:46%;font-size:1.4rem;animation:petalBob 3s ease-in-out 1s infinite">🌸</span>
+            <span style="position:absolute;top:46%;left:5%;font-size:1.4rem;animation:petalBob 3s ease-in-out 1.5s infinite">🌺</span>
+            <span style="position:absolute;top:20%;left:20%;font-size:0.85rem;animation:petalBob 3s ease-in-out 0.25s infinite">🌸</span>
+            <span style="position:absolute;top:20%;right:20%;font-size:0.85rem;animation:petalBob 3s ease-in-out 0.75s infinite">🌺</span>
+            <span style="position:absolute;bottom:20%;left:20%;font-size:0.85rem;animation:petalBob 3s ease-in-out 1.25s infinite">🌸</span>
+            <span style="position:absolute;bottom:20%;right:20%;font-size:0.85rem;animation:petalBob 3s ease-in-out 1.75s infinite">🌺</span>
+            <span style="font-size:2.2rem;animation:heartbeat 2s ease-in-out infinite;z-index:1">🌸</span>
           </div>
           <div class="gallery-overlay"><span>Bloom 🌸</span></div>
         </div>
 
-        <!-- Twinkling Stars Animation -->
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="120">
+        <!-- ── CENTRE: Simran's Photo ── -->
+        <div class="gc-center" data-aos="zoom-in" data-aos-delay="0" onclick="openLightbox(this)">
+          <img src="SIMRAN.jpeg" alt="Simran 💖" loading="lazy" />
+          <div class="gallery-overlay" style="opacity:1;background:linear-gradient(to top,rgba(200,30,120,0.55),transparent 55%)">
+            <span style="font-family:'Dancing Script',cursive;font-size:1.1rem;letter-spacing:0.05em">Simran 💖</span>
+          </div>
+        </div>
+
+        <!-- ── TOP-RIGHT: Twinkling Stars ── -->
+        <div class="gc-item a2" data-aos="zoom-in" data-aos-delay="60">
           <div class="anim-box anim-sparkle">
-            <span style="position:absolute;top:10%;left:16%;font-size:1.2rem;animation:twinkle 2s ease-in-out 0s infinite">✨</span>
-            <span style="position:absolute;top:18%;right:14%;font-size:1rem;animation:twinkle 2s ease-in-out 0.4s infinite">⭐</span>
-            <span style="position:absolute;top:52%;left:10%;font-size:0.9rem;animation:twinkle 2s ease-in-out 0.8s infinite">✨</span>
-            <span style="position:absolute;top:58%;right:8%;font-size:1.1rem;animation:twinkle 2s ease-in-out 1.2s infinite">🌟</span>
-            <span style="position:absolute;bottom:14%;left:28%;font-size:0.85rem;animation:twinkle 2s ease-in-out 1.6s infinite">✨</span>
-            <span style="position:absolute;bottom:18%;right:24%;font-size:1rem;animation:twinkle 2s ease-in-out 0.6s infinite">⭐</span>
-            <span style="position:absolute;top:38%;left:72%;font-size:0.9rem;animation:twinkle 2s ease-in-out 1s infinite">🌟</span>
-            <span style="font-size:3rem;animation:spinStar 4s linear infinite;z-index:1">✨</span>
+            <span style="position:absolute;top:10%;left:14%;font-size:1.1rem;animation:twinkle 2s ease-in-out 0s infinite">✨</span>
+            <span style="position:absolute;top:16%;right:12%;font-size:0.9rem;animation:twinkle 2s ease-in-out 0.4s infinite">⭐</span>
+            <span style="position:absolute;top:50%;left:8%;font-size:0.85rem;animation:twinkle 2s ease-in-out 0.8s infinite">✨</span>
+            <span style="position:absolute;top:55%;right:8%;font-size:1rem;animation:twinkle 2s ease-in-out 1.2s infinite">🌟</span>
+            <span style="position:absolute;bottom:14%;left:26%;font-size:0.8rem;animation:twinkle 2s ease-in-out 1.6s infinite">✨</span>
+            <span style="position:absolute;bottom:16%;right:22%;font-size:0.9rem;animation:twinkle 2s ease-in-out 0.6s infinite">⭐</span>
+            <span style="font-size:2.5rem;animation:spinStar 4s linear infinite;z-index:1">✨</span>
           </div>
           <div class="gallery-overlay"><span>Sparkle ✨</span></div>
         </div>
 
-        <!-- Falling Petals Animation -->
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="180">
+        <!-- ── BOTTOM-LEFT: Falling Petals ── -->
+        <div class="gc-item a3" data-aos="zoom-in" data-aos-delay="120">
           <div class="anim-box anim-petals">
-            <span style="position:absolute;left:10%;font-size:1.3rem;animation:petalFall 3s linear 0s infinite">🌸</span>
-            <span style="position:absolute;left:27%;font-size:1rem;animation:petalFall 3.5s linear 0.5s infinite">🌺</span>
-            <span style="position:absolute;left:46%;font-size:1.2rem;animation:petalFall 2.8s linear 1s infinite">🌸</span>
-            <span style="position:absolute;left:63%;font-size:1.1rem;animation:petalFall 3.8s linear 0.3s infinite">🌺</span>
-            <span style="position:absolute;left:80%;font-size:0.9rem;animation:petalFall 3.2s linear 1.5s infinite">🌸</span>
-            <span style="position:absolute;left:36%;font-size:1.4rem;animation:petalFall 3.6s linear 2s infinite">🌸</span>
-            <span style="position:absolute;left:54%;font-size:0.85rem;animation:petalFall 2.5s linear 0.8s infinite">🌺</span>
+            <span style="position:absolute;left:10%;font-size:1.2rem;animation:petalFall 3s linear 0s infinite">🌸</span>
+            <span style="position:absolute;left:28%;font-size:0.95rem;animation:petalFall 3.5s linear 0.5s infinite">🌺</span>
+            <span style="position:absolute;left:48%;font-size:1.1rem;animation:petalFall 2.8s linear 1s infinite">🌸</span>
+            <span style="position:absolute;left:66%;font-size:1rem;animation:petalFall 3.8s linear 0.3s infinite">🌺</span>
+            <span style="position:absolute;left:82%;font-size:0.85rem;animation:petalFall 3.2s linear 1.5s infinite">🌸</span>
+            <span style="position:absolute;left:36%;font-size:1.3rem;animation:petalFall 3.6s linear 2s infinite">🌸</span>
           </div>
           <div class="gallery-overlay"><span>Petals 🌺</span></div>
         </div>
 
-        <!-- Pulsing Hearts Animation -->
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="240">
+        <!-- ── BOTTOM-RIGHT: Pulsing Hearts ── -->
+        <div class="gc-item a4" data-aos="zoom-in" data-aos-delay="120">
           <div class="anim-box anim-heart">
-            <span style="position:absolute;font-size:7rem;opacity:0.1;animation:heartbeat 2s ease-in-out 0s infinite">💗</span>
-            <span style="position:absolute;font-size:4.5rem;opacity:0.22;animation:heartbeat 2s ease-in-out 0.2s infinite">💖</span>
-            <span style="position:absolute;font-size:2.8rem;opacity:0.55;animation:heartbeat 2s ease-in-out 0.35s infinite">❤️</span>
-            <span style="font-size:2rem;animation:heartbeat 1.5s ease-in-out infinite;z-index:1">💖</span>
+            <span style="position:absolute;font-size:6.5rem;opacity:0.1;animation:heartbeat 2s ease-in-out 0s infinite">💗</span>
+            <span style="position:absolute;font-size:4rem;opacity:0.2;animation:heartbeat 2s ease-in-out 0.2s infinite">💖</span>
+            <span style="position:absolute;font-size:2.4rem;opacity:0.5;animation:heartbeat 2s ease-in-out 0.35s infinite">❤️</span>
+            <span style="font-size:1.8rem;animation:heartbeat 1.5s ease-in-out infinite;z-index:1">💖</span>
           </div>
           <div class="gallery-overlay"><span>Love 💖</span></div>
         </div>
 
-        <!-- Celebration / Confetti Animation -->
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+        <!-- ── BOTTOM-CENTRE: Celebration ── -->
+        <div class="gc-item a5" data-aos="zoom-in" data-aos-delay="180">
           <div class="anim-box anim-celebrate">
-            <span style="position:absolute;left:6%; width:9px;height:9px;border-radius:2px;background:#f06292;animation:confPiece 2.2s linear 0s infinite"></span>
-            <span style="position:absolute;left:20%;width:9px;height:9px;border-radius:2px;background:#ce93d8;animation:confPiece 2.8s linear 0.3s infinite"></span>
-            <span style="position:absolute;left:37%;width:9px;height:9px;border-radius:2px;background:#4fc3f7;animation:confPiece 2.4s linear 0.6s infinite"></span>
-            <span style="position:absolute;left:56%;width:9px;height:9px;border-radius:2px;background:#e91e8c;animation:confPiece 3s   linear 0.9s infinite"></span>
-            <span style="position:absolute;left:72%;width:9px;height:9px;border-radius:2px;background:#f9c74f;animation:confPiece 2.6s linear 1.2s infinite"></span>
-            <span style="position:absolute;left:86%;width:9px;height:9px;border-radius:2px;background:#a5d6a7;animation:confPiece 2.1s linear 1.5s infinite"></span>
-            <span style="position:absolute;left:48%;width:9px;height:9px;border-radius:2px;background:#f06292;animation:confPiece 3.2s linear 0.5s infinite"></span>
-            <span style="position:absolute;left:13%;width:9px;height:9px;border-radius:2px;background:#f9c74f;animation:confPiece 2.7s linear 1.8s infinite"></span>
-            <span style="font-size:2.8rem;animation:heartbeat 1.5s ease-in-out infinite;z-index:1">🎂</span>
+            <span style="position:absolute;left:5%; width:9px;height:9px;border-radius:2px;background:#f06292;animation:confPiece 2.2s linear 0s infinite"></span>
+            <span style="position:absolute;left:18%;width:9px;height:9px;border-radius:2px;background:#ce93d8;animation:confPiece 2.8s linear 0.3s infinite"></span>
+            <span style="position:absolute;left:34%;width:9px;height:9px;border-radius:2px;background:#4fc3f7;animation:confPiece 2.4s linear 0.6s infinite"></span>
+            <span style="position:absolute;left:52%;width:9px;height:9px;border-radius:2px;background:#e91e8c;animation:confPiece 3s   linear 0.9s infinite"></span>
+            <span style="position:absolute;left:68%;width:9px;height:9px;border-radius:2px;background:#f9c74f;animation:confPiece 2.6s linear 1.2s infinite"></span>
+            <span style="position:absolute;left:82%;width:9px;height:9px;border-radius:2px;background:#a5d6a7;animation:confPiece 2.1s linear 1.5s infinite"></span>
+            <span style="position:absolute;left:25%;width:9px;height:9px;border-radius:2px;background:#f06292;animation:confPiece 3.2s linear 0.5s infinite"></span>
+            <span style="position:absolute;left:60%;width:9px;height:9px;border-radius:2px;background:#f9c74f;animation:confPiece 2.7s linear 1.8s infinite"></span>
+            <span style="font-size:2.5rem;animation:heartbeat 1.5s ease-in-out infinite;z-index:1">🎂</span>
           </div>
           <div class="gallery-overlay"><span>Celebrate 🎂</span></div>
         </div>
@@ -1584,7 +1629,7 @@
 
     function openLightbox(el) {
       const img = el.querySelector('img');
-      if (!img) return; // animated items — no lightbox needed
+      if (!img) return;
       lightboxImg.src = img.src;
       lightboxImg.alt = img.alt;
       lightbox.classList.add('open');
